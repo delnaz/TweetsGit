@@ -3,10 +3,10 @@ package com.codepath.apps.mysimpletweets.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +19,7 @@ import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.adapter.EndlessScrollListener;
 import com.codepath.apps.mysimpletweets.adapter.TweetsArrayAdapter;
+import com.codepath.apps.mysimpletweets.fragment.ComposeTweetFragment;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.utils.Utils;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -33,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements ComposeTweetFragment.OnTweetPostListener{
 
     public static final String KEY_NAME = "name";
     public static final String KEY_SCREEN_NAME = "screenName";
@@ -95,28 +96,17 @@ public class TimelineActivity extends AppCompatActivity {
         myFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TimelineActivity.this,ComposeTweetActivity.class);
-                startActivity(intent);
+                showEditDialog();
             }
         });
         userProfile();
     }
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_timeline, menu);
-        MenuItem item = menu.findItem(R.id.miCompose);
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(TimelineActivity.this,ComposeTweetActivity.class);
-                startActivity(intent);
-                return true;
-            }
-        });
-        return true;
+    private void showEditDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        ComposeTweetFragment composeDialogFragment = new ComposeTweetFragment();
+        composeDialogFragment.show(fm, "fragment_compose_tweet");
     }
-*/
+
     public void populateTimeline(){
         loading = true;
 
@@ -201,5 +191,12 @@ public class TimelineActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
             }
         });
+    }
+
+    @Override
+    public void onTweetPost() {
+        tweetAdapter.clear();
+        tweetAdapter.notifyDataSetChanged();
+        populateTimeline();
     }
 }

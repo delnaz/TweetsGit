@@ -1,22 +1,28 @@
-package com.codepath.apps.mysimpletweets.activities;
+package com.codepath.apps.mysimpletweets.fragment;
+
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
+import com.codepath.apps.mysimpletweets.activities.TimelineActivity;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
@@ -25,27 +31,33 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
-public class ComposeTweetActivity extends AppCompatActivity {
+public class ComposeTweetFragment extends DialogFragment {
 
     SharedPreferences preferences;
     @BindView(R.id.tvBody) EditText tvBody;
-    @BindView(R.id.tvCount) TextView tvCount;
+    @BindView(R.id.tvCount)
+    TextView tvCount;
     @BindView(R.id.tvUserName)TextView tvUserName;
     @BindView(R.id.tvScreenName) TextView tvScreenName;
     @BindView(R.id.ivProfile)ImageView ivProfile;
-   // TextView tvCount;
-    //EditText tvBody;
+    @BindView(R.id.btnTweet) Button btnTweet;
+    @BindView(R.id.ivClose)ImageView ivClose;
     String status = "";
     TwitterClient twitterClient;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose_tweet);
-        ButterKnife.bind(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_compose_tweet, container);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+       super.onViewCreated(view, savedInstanceState);
+        // Get field from view
+        ButterKnife.bind(this,view);
         twitterClient = TwitterApplication.getRestClient();
-      //  tvBody = (EditText) findViewById(R.id.tvBody);
-       // tvCount = (TextView)findViewById(R.id.tvCount);
-        preferences = getSharedPreferences(TimelineActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        preferences = getActivity().getSharedPreferences(TimelineActivity.MyPREFERENCES, Context.MODE_PRIVATE);
         String name = preferences.getString(TimelineActivity.KEY_NAME, null);
         if(name == null)
             tvUserName.setVisibility(View.INVISIBLE);
@@ -63,11 +75,29 @@ public class ComposeTweetActivity extends AppCompatActivity {
             Glide.with(this).load(name).into(ivProfile);
         }
 
+        btnTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                postTweet();
+            }
+        });
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ComposeTweetFragment.this.dismiss();
+            }
+        });
         tvBody.addTextChangedListener(new TextWatcher()
         {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
+                if(s.toString().length() > 140){
+                    tvCount.setTextColor(ContextCompat.getColor(getContext(),android.R.color.holo_red_dark));
+                } else{
+                    tvCount.setTextColor(ContextCompat.getColor(getContext(),android.R.color.holo_green_dark));
+                }
                 tvCount.setText(140 - s.toString().length() + "/140");
             }
 
@@ -81,40 +111,32 @@ public class ComposeTweetActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
-    public void composeTweet(View view) {
-
-        //tvBody = (EditText)findViewById(R.id.tvBody);
-        status = tvBody.getText().toString();
-        //twitterClient = TwitterApplication.getRestClient();
-        postTweet();
-      //  Toast.makeText(getBaseContext(),"testing tweet",Toast.LENGTH_SHORT).show();
-    }
 
     public void postTweet(){
+        status = tvBody.getText().toString();
+        if(status.length() > 140){
+            Toast.makeText(getActivity(), "Character limit exceeded , only 140 allowed", Toast.LENGTH_SHORT).show();
+            return;
+        }
         twitterClient.composeTweets(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
-                Log.d("success", "onSuccess: " + responseBody.toString());
-          //      Toast.makeText(getBaseContext(),"inside successs",Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(ComposeTweetActivity.this,TimelineActivity.class);
-                startActivity(intent);
-               /*
-                TimelineActivity timeAc = new TimelineActivity();
-                timeAc.populateTimeline();*/
+               if(getActivity() instanceof OnTweetPostListener){
+                   ((OnTweetPostListener) getActivity()).onTweetPost();
+               }
+                ComposeTweetFragment.this.dismiss();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                //super.onFailure(statusCode, headers, throwable, errorResponse);
-                Log.d("error", "onFailure: " + errorResponse.toString());
-          //      Toast.makeText(getBaseContext(),"inside failure",Toast.LENGTH_SHORT).show();
-
+                ComposeTweetFragment.this.dismiss();
             }
         },status);
     }
 
+    public interface OnTweetPostListener{
+        void onTweetPost();
+    }
 }

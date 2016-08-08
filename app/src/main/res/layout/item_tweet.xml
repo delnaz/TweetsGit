@@ -61,6 +61,7 @@
             android:layout_toRightOf="@+id/ivProfileImage"
             android:id="@+id/ivTweetData"
             android:visibility="gone"
+            android:layout_marginTop="8dp"
             />
 
     </RelativeLayout>
