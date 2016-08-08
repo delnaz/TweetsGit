@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.mysimpletweets.LinkifiedTextView;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.utils.Utils;
@@ -48,6 +49,13 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         if(tweet.isRetweeted()){
             viewHolder.ivretweet.setColorFilter(ContextCompat.getColor(getContext(),R.color.retweet));
         }
+        if(tweet.getType() != null && tweet.getType().equalsIgnoreCase("photo")){
+            viewHolder.ivTweetData.setVisibility(View.VISIBLE);
+            Glide.with(getContext()).load(tweet.getMediaUrl()).into(viewHolder.ivTweetData);
+        } else {
+            viewHolder.ivTweetData.setVisibility(View.GONE);
+        }
+
         Glide.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.ivProfileImage);
         return convertView;
     }
@@ -57,14 +65,14 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     static class ViewHolder{
         @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
         @BindView(R.id.tvUser) TextView tvUser;
-        @BindView(R.id.tvTweetBody) TextView tvTweetBody;
+        @BindView(R.id.tvTweetBody) LinkifiedTextView tvTweetBody;
         @BindView(R.id.tvCreatedAt) TextView tvCreatedAt;
         @BindView(R.id.tvName) TextView tvName;
         @BindView(R.id.tvFavorite) TextView tvFav;
         @BindView(R.id.tvRetweet) TextView tvRetweet;
         @BindView(R.id.ivFavorites) ImageView ivFav;
         @BindView(R.id.ivRetweet) ImageView ivretweet;
-
+        @BindView(R.id.ivTweetData) ImageView ivTweetData;
         public ViewHolder(View view){
             ButterKnife.bind(this,view);
         }

@@ -84,6 +84,25 @@ public class Tweet {
 
     boolean favorited,retweeted;
     int retweetCount;
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public void setMediaUrl(String mediaUrl) {
+        this.mediaUrl = mediaUrl;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    String mediaUrl;
+    String type;
     public static Tweet fromJSON(JSONObject jsonObject){
         Tweet tweet = new Tweet();
         try {
@@ -95,6 +114,16 @@ public class Tweet {
             tweet.retweetCount = jsonObject.getInt("retweet_count");
             tweet.favorited = jsonObject.getBoolean("favorited");
             tweet.retweeted = jsonObject.getBoolean("retweeted");
+            if(jsonObject.has("extended_entities")){
+               JSONObject ext = jsonObject.getJSONObject("extended_entities");
+                if(ext.has("media")){
+                    JSONArray mediaArr = ext.getJSONArray("media");
+                    if(mediaArr.length() > 0){
+                        tweet.mediaUrl = ((JSONObject)mediaArr.get(0)).getString("media_url");
+                        tweet.type = ((JSONObject)mediaArr.get(0)).getString("type");
+                    }
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -4,59 +4,73 @@
     android:layout_height="match_parent"
     android:padding="5dp">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:id="@+id/ivProfileImage" />
-
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/tvName"
         android:layout_alignParentTop="true"
-        android:textStyle="bold"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:paddingLeft="5dp"/>
+        android:id="@+id/top_layer">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/ivProfileImage" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/tvUser"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/tvName"
-        android:paddingLeft="5dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/tvName"
+            android:layout_alignParentTop="true"
+            android:textStyle="bold"
+            android:layout_toRightOf="@+id/ivProfileImage"
+            android:paddingLeft="5dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/tvUser"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/tvName"
+            android:paddingLeft="5dp" />
 
+        <com.codepath.apps.mysimpletweets.LinkifiedTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/tvTweetBody"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/tvName"
+            android:layout_toRightOf="@+id/ivProfileImage"
+            android:paddingLeft="5dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/tvTweetBody"
-        android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/tvName"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:paddingLeft="5dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/tvCreatedAt"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/tvCreatedAt"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTweetBody"
+            android:layout_toRightOf="@+id/ivProfileImage"
+            android:id="@+id/ivTweetData"
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/linearLayoutFav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/tvTweetBody"
+        android:layout_below="@+id/top_layer"
         android:layout_alignParentRight="true">
         <ImageView
             android:layout_width="20dp"
@@ -80,7 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/tvTweetBody">
+        android:layout_below="@+id/top_layer">
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -97,8 +111,6 @@
 
     </LinearLayout>
 
-
-
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -107,7 +119,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:paddingRight="2dp"
-        android:layout_below="@+id/tvTweetBody"
+        android:layout_below="@+id/top_layer"
         />
 
 </RelativeLayout>
