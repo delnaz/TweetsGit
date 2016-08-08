@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.codepath.apps.mysimpletweets.LinkifiedTextView;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.utils.Utils;
@@ -65,7 +64,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     static class ViewHolder{
         @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
         @BindView(R.id.tvUser) TextView tvUser;
-        @BindView(R.id.tvTweetBody) LinkifiedTextView tvTweetBody;
+        @BindView(R.id.tvTweetBody) TextView tvTweetBody;
         @BindView(R.id.tvCreatedAt) TextView tvCreatedAt;
         @BindView(R.id.tvName) TextView tvName;
         @BindView(R.id.tvFavorite) TextView tvFav;
