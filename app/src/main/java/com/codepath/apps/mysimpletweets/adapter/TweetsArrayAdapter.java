@@ -45,9 +45,13 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewHolder.ivProfileImage.setImageResource(0);
         if(tweet.isFavorited()){
             viewHolder.ivFav.setColorFilter(ContextCompat.getColor(getContext(),R.color.like));
+        } else{
+            viewHolder.ivFav.setColorFilter(ContextCompat.getColor(getContext(),R.color.default_color));
         }
         if(tweet.isRetweeted()){
             viewHolder.ivretweet.setColorFilter(ContextCompat.getColor(getContext(),R.color.retweet));
+        } else{
+            viewHolder.ivretweet.setColorFilter(ContextCompat.getColor(getContext(),R.color.default_color));
         }
         if(tweet.getType() != null && tweet.getType().equalsIgnoreCase("photo")){
             viewHolder.ivTweetData.setVisibility(View.VISIBLE);

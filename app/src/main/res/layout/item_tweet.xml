@@ -75,8 +75,8 @@
         android:layout_below="@+id/top_layer"
         android:layout_alignParentRight="true">
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
             android:id="@+id/ivFavorites"
             android:src="@drawable/like"
             android:paddingRight="2dp"
@@ -98,8 +98,8 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/top_layer">
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
             android:id="@+id/ivRetweet"
             android:src="@drawable/retweet"
             android:paddingRight="2dp"
@@ -114,8 +114,8 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
         android:id="@+id/ivReply"
         android:src="@drawable/reply"
         android:layout_alignParentBottom="true"
