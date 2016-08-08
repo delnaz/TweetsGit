@@ -103,6 +103,16 @@ public class Tweet {
 
     String mediaUrl;
     String type;
+
+    public String getIdStr() {
+        return idStr;
+    }
+
+    public void setIdStr(String idStr) {
+        this.idStr = idStr;
+    }
+
+    String idStr;
     public static Tweet fromJSON(JSONObject jsonObject){
         Tweet tweet = new Tweet();
         try {
@@ -114,6 +124,7 @@ public class Tweet {
             tweet.retweetCount = jsonObject.getInt("retweet_count");
             tweet.favorited = jsonObject.getBoolean("favorited");
             tweet.retweeted = jsonObject.getBoolean("retweeted");
+            tweet.idStr = jsonObject.getString("id_str");
             if(jsonObject.has("extended_entities")){
                JSONObject ext = jsonObject.getJSONObject("extended_entities");
                 if(ext.has("media")){

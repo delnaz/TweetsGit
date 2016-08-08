@@ -23,6 +23,7 @@ import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.activities.TimelineActivity;
+import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
@@ -42,6 +43,7 @@ public class ComposeTweetFragment extends DialogFragment {
     @BindView(R.id.ivProfile)ImageView ivProfile;
     @BindView(R.id.btnTweet) Button btnTweet;
     @BindView(R.id.ivClose)ImageView ivClose;
+    @BindView(R.id.replyName) TextView replyName;
     String status = "";
     TwitterClient twitterClient;
 
@@ -51,11 +53,28 @@ public class ComposeTweetFragment extends DialogFragment {
         return inflater.inflate(R.layout.activity_compose_tweet, container);
     }
 
+    Tweet tweet;
+    Boolean isReply = false;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
        super.onViewCreated(view, savedInstanceState);
         // Get field from view
         ButterKnife.bind(this,view);
+
+        Bundle args = getArguments();
+
+        if(args.getBoolean("isReply")) {
+            tweet = ((TimelineActivity)getActivity()).replyTweet;
+            tvBody.setText("@"+tweet.getUser().getScreenName()+" ");
+            tvBody.setSelection(tvBody.length());
+            replyName.setVisibility(View.VISIBLE);
+            replyName.setText("In Reply To: "+tweet.getUser().getName());
+            isReply = true;
+        } else {
+            replyName.setVisibility(View.INVISIBLE);
+        }
+
         twitterClient = TwitterApplication.getRestClient();
         preferences = getActivity().getSharedPreferences(TimelineActivity.MyPREFERENCES, Context.MODE_PRIVATE);
         String name = preferences.getString(TimelineActivity.KEY_NAME, null);
@@ -120,20 +139,41 @@ public class ComposeTweetFragment extends DialogFragment {
             Toast.makeText(getActivity(), "Character limit exceeded , only 140 allowed", Toast.LENGTH_SHORT).show();
             return;
         }
-        twitterClient.composeTweets(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
-               if(getActivity() instanceof OnTweetPostListener){
-                   ((OnTweetPostListener) getActivity()).onTweetPost();
-               }
-                ComposeTweetFragment.this.dismiss();
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                ComposeTweetFragment.this.dismiss();
-            }
-        },status);
+        if(isReply) {
+            twitterClient.composeTweetsReply(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
+                    if(getActivity() instanceof OnTweetPostListener){
+                        ((OnTweetPostListener) getActivity()).onTweetPost();
+                    }
+                    ComposeTweetFragment.this.dismiss();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    ComposeTweetFragment.this.dismiss();
+                }
+            },status, tweet.getUid()+"");
+        } else {
+            twitterClient.composeTweets(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
+                    if(getActivity() instanceof OnTweetPostListener){
+                        ((OnTweetPostListener) getActivity()).onTweetPost();
+                    }
+                    ComposeTweetFragment.this.dismiss();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    ComposeTweetFragment.this.dismiss();
+                }
+            },status);
+        }
+
+
+
     }
 
     public interface OnTweetPostListener{

@@ -101,12 +101,28 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         });
         userProfile();
     }
-    private void showEditDialog() {
+    public void showEditDialog() {
         FragmentManager fm = getSupportFragmentManager();
         ComposeTweetFragment composeDialogFragment = new ComposeTweetFragment();
+        Bundle args = new Bundle();
+        args.putBoolean("isReply",false);
+
+        composeDialogFragment.setArguments(args);
         composeDialogFragment.show(fm, "fragment_compose_tweet");
+
     }
 
+    public Tweet replyTweet;
+    public void showEditDialog(Tweet tweet) {
+        replyTweet = tweet;
+        FragmentManager fm = getSupportFragmentManager();
+        ComposeTweetFragment composeDialogFragment = new ComposeTweetFragment();
+        Bundle args = new Bundle();
+        args.putBoolean("isReply",true);
+        composeDialogFragment.setArguments(args);
+        composeDialogFragment.show(fm, "fragment_reply_tweet");
+
+    }
     public void populateTimeline(){
         loading = true;
 
@@ -199,4 +215,5 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         tweetAdapter.notifyDataSetChanged();
         populateTimeline();
     }
+
 }

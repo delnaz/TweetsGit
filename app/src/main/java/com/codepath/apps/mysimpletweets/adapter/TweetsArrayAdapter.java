@@ -1,6 +1,5 @@
 package com.codepath.apps.mysimpletweets.adapter;
 
-import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.activities.TimelineActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.utils.Utils;
 
@@ -22,14 +22,15 @@ import butterknife.ButterKnife;
 
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
-
-    public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
-        super(context,0, tweets);
+    TimelineActivity timelineActivity;
+    public TweetsArrayAdapter(TimelineActivity activity, List<Tweet> tweets) {
+        super(activity,0, tweets);
+        timelineActivity = activity;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Tweet tweet = getItem(position);
+        final Tweet tweet = getItem(position);
         ViewHolder viewHolder;
         if(convertView == null){
            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet,parent,false);
@@ -55,6 +56,12 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             viewHolder.ivTweetData.setVisibility(View.GONE);
         }
 
+        viewHolder.ivReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timelineActivity.showEditDialog(tweet);
+            }
+        });
         Glide.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.ivProfileImage);
         return convertView;
     }
@@ -72,6 +79,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         @BindView(R.id.ivFavorites) ImageView ivFav;
         @BindView(R.id.ivRetweet) ImageView ivretweet;
         @BindView(R.id.ivTweetData) ImageView ivTweetData;
+        @BindView(R.id.ivReply) ImageView ivReply;
         public ViewHolder(View view){
             ButterKnife.bind(this,view);
         }
