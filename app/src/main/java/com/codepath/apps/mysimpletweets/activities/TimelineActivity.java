@@ -6,12 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.codepath.apps.mysimpletweets.R;
@@ -42,6 +42,7 @@ public class TimelineActivity extends AppCompatActivity {
     Activity mActivity;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
     @BindView(R.id.lvTweets) ListView lvTweets;
+    @BindView(R.id.myFAB) FloatingActionButton myFAB;
     private TwitterClient twitterClient;
     ArrayList<Tweet> tweets;
     TweetsArrayAdapter tweetAdapter;
@@ -90,9 +91,17 @@ public class TimelineActivity extends AppCompatActivity {
                 return loading;
             }
         });
+
+        myFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TimelineActivity.this,ComposeTweetActivity.class);
+                startActivity(intent);
+            }
+        });
         userProfile();
     }
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_timeline, menu);
@@ -107,7 +116,7 @@ public class TimelineActivity extends AppCompatActivity {
         });
         return true;
     }
-
+*/
     public void populateTimeline(){
         loading = true;
 
