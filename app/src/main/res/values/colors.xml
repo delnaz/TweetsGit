@@ -5,8 +5,14 @@
     <color name="colorPrimaryDark">#0091EA</color>
     <color name="colorAccent">#3186c7</color>
     <color name="default_color">#AAB8C2</color>
+
+    <color name="default_color_text">#555555</color>
     <color name="like">#E81C4F</color>
     <color name="retweet">#19CF86</color>
     <color name="reply">#AAB8C2</color>
     <color name="pressed">#661DA1F2</color>
+
+
+    <color name="black_trans">#99000000</color>
+
 </resources>

@@ -2,6 +2,7 @@ package com.codepath.apps.mysimpletweets.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -25,8 +26,9 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
 	@Override
 	public void onLoginSuccess() {
-		 Intent i = new Intent(this, TimelineActivity.class);
+		 Intent i = new Intent(this, MainActivity.class);
 		 startActivity(i);
+        this.finish();
 	}
 
 	@Override
@@ -35,7 +37,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	}
 
 	public void loginToRest(View view) {
-		getClient().connect();
+        getClient().connect();
 	}
 
 }

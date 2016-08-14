@@ -22,7 +22,8 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
-import com.codepath.apps.mysimpletweets.activities.TimelineActivity;
+import com.codepath.apps.mysimpletweets.activities.BaseActivity;
+import com.codepath.apps.mysimpletweets.activities.MainActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -36,8 +37,7 @@ public class ComposeTweetFragment extends DialogFragment {
 
     SharedPreferences preferences;
     @BindView(R.id.tvBody) EditText tvBody;
-    @BindView(R.id.tvCount)
-    TextView tvCount;
+    @BindView(R.id.tvCount)TextView tvCount;
     @BindView(R.id.tvUserName)TextView tvUserName;
     @BindView(R.id.tvScreenName) TextView tvScreenName;
     @BindView(R.id.ivProfile)ImageView ivProfile;
@@ -65,7 +65,7 @@ public class ComposeTweetFragment extends DialogFragment {
         Bundle args = getArguments();
 
         if(args.getBoolean("isReply")) {
-            tweet = ((TimelineActivity)getActivity()).replyTweet;
+            tweet = ((BaseActivity)getActivity()).replyTweet;
             tvBody.setText("@"+tweet.getUser().getScreenName()+" ");
             tvBody.setSelection(tvBody.length());
             replyName.setVisibility(View.VISIBLE);
@@ -76,20 +76,20 @@ public class ComposeTweetFragment extends DialogFragment {
         }
 
         twitterClient = TwitterApplication.getRestClient();
-        preferences = getActivity().getSharedPreferences(TimelineActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-        String name = preferences.getString(TimelineActivity.KEY_NAME, null);
+        preferences = getActivity().getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        String name = preferences.getString(MainActivity.KEY_NAME, null);
         if(name == null)
             tvUserName.setVisibility(View.INVISIBLE);
         else
             tvUserName.setText(name);
 
-        name = preferences.getString(TimelineActivity.KEY_SCREEN_NAME, null);
+        name = preferences.getString(MainActivity.KEY_SCREEN_NAME, null);
         if(name == null)
             tvScreenName.setVisibility(View.INVISIBLE);
         else
             tvScreenName.setText('@'+name);
 
-        name = preferences.getString(TimelineActivity.KEY_PROFILE_IMAGE, null);
+        name = preferences.getString(MainActivity.KEY_PROFILE_IMAGE, null);
         if(name != null){
             Glide.with(this).load(name).into(ivProfile);
         }
@@ -159,10 +159,11 @@ public class ComposeTweetFragment extends DialogFragment {
             twitterClient.composeTweets(new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
+                    ComposeTweetFragment.this.dismiss();
                     if(getActivity() instanceof OnTweetPostListener){
                         ((OnTweetPostListener) getActivity()).onTweetPost();
                     }
-                    ComposeTweetFragment.this.dismiss();
+
                 }
 
                 @Override
