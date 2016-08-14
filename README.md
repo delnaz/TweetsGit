@@ -34,8 +34,9 @@ The following **optional** features are implemented:
 The following **bonus** features are implemented:
 
 * [X] Use Parcelable instead of Serializable using the popular [Parceler library](http://guides.codepath.com/android/Using-Parceler)
-* [ ] Leverages the [data binding support module](http://guides.codepath.com/android/Applying-Data-Binding-for-Views) to bind data into layout templates.
 * [X] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce view boilerplate.
+* [ ] Leverages the [data binding support module](http://guides.codepath.com/android/Applying-Data-Binding-for-Views) to bind data into layout templates.
+
 * [ ] User can view their direct messages (or send new ones)
 
 The following **additional** features are implemented:
@@ -45,7 +46,7 @@ The following **additional** features are implemented:
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
-![alt tag](https://github.com/delnaz/Tweets/blob/master/codePathTweets4.gif) 
+![alt tag](https://github.com/delnaz/TweetsGit/blob/master/codePathTweets4.gif) 
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
