@@ -131,4 +131,12 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("count",200);
         client.get(apiUrl,params,handler);
     }
+
+	public void search(AsyncHttpResponseHandler handler,String query){
+		String apiUrl = getApiUrl("search/tweets.json");
+		RequestParams params = new RequestParams();
+		params.put("q",query);
+		params.put("count",100);
+		client.get(apiUrl,params,handler);
+	}
 }
