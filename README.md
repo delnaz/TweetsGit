@@ -39,10 +39,6 @@ The following **bonus** features are implemented:
 
 * [ ] User can view their direct messages (or send new ones)
 
-The following **additional** features are implemented:
-
-* [ ] List anything else that you can get done to improve the app functionality!
-
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
