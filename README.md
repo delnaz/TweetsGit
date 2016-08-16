@@ -41,7 +41,7 @@ The following **bonus** features are implemented:
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
-![alt tag](https://github.com/delnaz/Tweets/blob/master/codePathTweets4.gif) 
+![alt tag](https://github.com/delnaz/TweetsGit/blob/master/codePathTweets4.gif) 
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
